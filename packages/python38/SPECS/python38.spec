@@ -24,6 +24,11 @@ A minimal port of python 3.8.1 against sgug-rse.
 %build
 export LDFLAGS="-lpthread -Wl,-rpath -Wl,%{_libdir}"
 %{configure} --enable-shared
+# this can't be set through configure
+X=`mktemp`
+sed 's,^SCRIPTDIR.*$,SCRIPTDIR=     $(prefix)/lib32,g' < Makefile > $X
+cat $X > Makefile
+rm -f $X
 make %{?_smp_mflags}
 
 %check
