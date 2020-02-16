@@ -14,6 +14,7 @@ AutoReqProv: 0
 Patch0: python-3.8.1-irix.patch
 Patch1: python-3.8.1-syspath-lib32.patch
 Patch2: python-3.8.1-more-lib32.patch
+Patch3: python-3.8.1-even-more-lib32.patch
 
 %description
 A minimal port of python 3.8.1 against sgug-rse.
@@ -23,7 +24,8 @@ A minimal port of python 3.8.1 against sgug-rse.
 %setup -q -n Python-%{version}
 %patch0 -p1 -b .3.8.1-irix~
 %patch1 -p0 -b .3.8.1-irix~
-%patch2 -p0 -b .3.8.1-irix~
+%patch2 -p1 -b .3.8.1-irix~
+%patch3 -p1 -b .3.8.1-irix~
 
 %build
 export LDFLAGS="-lpthread -Wl,-rpath -Wl,%{_libdir}"
