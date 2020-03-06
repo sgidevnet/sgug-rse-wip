@@ -23,9 +23,20 @@ BuildRequires: ncurses-devel
 #BuildRequires: pcre-devel
 BuildRequires: sed
 #BuildRequires: texi2html
-#BuildRequires: texinfo
+BuildRequires: texinfo
 Requires(post): grep
 Requires(postun): coreutils grep
+
+# the hostname package is not available on RHEL-6
+%if 12 < 0%{?fedora} || 6 < 0%{?rhel}
+BuildRequires: hostname
+%else
+# /bin and /usr/bin are separate directories on RHEL-6
+#%define _bindir /bin
+%endif
+
+Provides: %{_prefix}/bin/zsh
+#AutoReq: no
 
 %description
 The zsh shell is a command interpreter usable as an interactive login
@@ -52,6 +63,24 @@ This package contains the Zsh manual in html format.
 %prep
 %autosetup -p1
 autoreconf -fiv
+
+#Rewrite shebangs
+perl -pi -e "s|/usr/local/bin/zsh|%{_prefix}/bin/zsh|g" Misc/globtests
+perl -pi -e "s|/usr/local/bin/zsh|%{_prefix}/bin/zsh|g" Misc/globtests.ksh
+perl -pi -e "s|/usr/local/bin/zsh|%{_prefix}/bin/zsh|g" Util/reporter
+
+perl -pi -e "s|/bin/zsh|%{_prefix}/bin/zsh|g" Test/runtests.zsh
+perl -pi -e "s|/bin/zsh|%{_prefix}/bin/zsh|g" Test/ztst.zsh
+perl -pi -e "s|/bin/zsh|%{_prefix}/bin/zsh|g" Util/check-tmux-state
+perl -pi -e "s|/bin/zsh|%{_prefix}/bin/zsh|g" Functions/Misc/zed
+perl -pi -e "s|/bin/zsh|%{_prefix}/bin/zsh|g" Functions/Misc/checkmail
+perl -pi -e "s|/bin/zsh|%{_prefix}/bin/zsh|g" Functions/Misc/run-help
+perl -pi -e "s|/bin/zsh|%{_prefix}/bin/zsh|g" Functions/Misc/zkbd
+perl -pi -e "s|/bin/zsh|%{_prefix}/bin/zsh|g" Functions/Misc/run-help-ip
+perl -pi -e "s|/bin/zsh|%{_prefix}/bin/zsh|g" Functions/Misc/zcalc
+perl -pi -e "s|/bin/zsh|%{_prefix}/bin/zsh|g" Functions/Calendar/calendar_add
+perl -pi -e "s|/bin/zsh|%{_prefix}/bin/zsh|g" Functions/Example/cat
+perl -pi -e "s|/bin/zsh|%{_prefix}/bin/zsh|g" Functions/Example/zless
 
 # enable parallel build
 sed -e 's|^\.NOTPARALLEL|#.NOTPARALLEL|' -i 'Config/defs.mk.in'
