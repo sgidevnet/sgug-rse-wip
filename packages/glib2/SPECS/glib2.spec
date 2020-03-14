@@ -20,9 +20,10 @@ A quick and dirty port of glib 2.59.0
 %patch0 -p1 -b .irix~ 
 
 %build
-export LDFLAGS="-lpthread -Wl,-rpath -Wl,%{_libdir}"
+#export LDFLAGS="-lpthread -Wl,-rpath -Wl,%{_libdir}"
 ./autogen.sh
 %{configure} --with-libiconv=gnu
+make %{?_smp_mflags}
 
 %check
 
