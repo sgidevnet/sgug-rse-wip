@@ -101,6 +101,20 @@ mkdir -p $RPM_BUILD_ROOT%{_libdir}/gcc-cross
 
 rm -rf $RPM_BUILD_ROOT%{_docdir}/*
 
+# Setup the masq links in an appropriate directory
+mkdir -p $RPM_BUILD_ROOT%{_prefix}/distccmasqbin
+pushd $RPM_BUILD_ROOT%{_prefix}/distccmasqbin
+ln -s ../bin/distcc c++
+ln -s ../bin/distcc cc
+ln -s ../bin/distcc cpp
+ln -s ../bin/distcc g++
+ln -s ../bin/distcc gcc
+
+ln -s ../bin/distcc mips-sgi-irix6.5-c++
+ln -s ../bin/distcc mips-sgi-irix6.5-g++
+ln -s ../bin/distcc mips-sgi-irix6.5-gcc
+popd
+
 #%post server
 ##[ $1 -lt 2 ] && /sbin/chkconfig --add distccd ||:
 #if [ $1 -eq 1 ] ; then 
@@ -131,6 +145,7 @@ rm -rf $RPM_BUILD_ROOT%{_docdir}/*
 %{_bindir}/distccmon-text
 %{_bindir}/lsdistcc
 #%{_bindir}/pump
+%{_prefix}/distccmasqbin/*
 %{_mandir}/man1/distcc.*
 %{_mandir}/man1/distccmon*
 %{_mandir}/man1/pump*
