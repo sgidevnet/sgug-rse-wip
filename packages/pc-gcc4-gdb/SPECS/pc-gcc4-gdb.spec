@@ -70,7 +70,6 @@ rm -rf $RPM_BUILD_ROOT%{gcc4prefix}/info
 rm -rf $RPM_BUILD_ROOT%{gcc4prefix}/man
 
 rm -rf $RPM_BUILD_ROOT%{gcc4includedir}
-rm -rf $RPM_BUILD_ROOT%{gcc4bindir}/run
 rm -rf $RPM_BUILD_ROOT%{gcc4libdir}
 
 %files
