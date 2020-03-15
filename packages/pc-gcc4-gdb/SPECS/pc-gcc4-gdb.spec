@@ -9,7 +9,7 @@
 Summary: Period correct gcc4 toolchain - gdb
 Name: pc-gcc4-gdb
 Version: 0.0.1
-Release: 1wip%{?dist}
+Release: 2wip%{?dist}
 License: GPLv3+
 URL: https://ftp.gnu.org/pub/gnu/gdb/
 Source: https://ftp.gnu.org/pub/gnu/gdb/gdb-6.8a.tar.gz
@@ -34,10 +34,6 @@ A work in progress for a period correct gcc4 toolchain - this is the binutils pa
 %patch0 -p1 -b .sgifixes
 
 %build
-export SHELL=%{_bindir}/sh
-export SHELL_PATH="$SHELL"
-export CONFIG_SHELL="$SHELL"
-
 export PATH="%{gcc4bindir}:$PATH"
 export LD_LIBRARYN32_PATH="%{gcc4libdir}:$LD_LIBRARYN32_PATH"
 

@@ -1,6 +1,8 @@
 # This package is able to use optimised linker flags.
 %global build_ldflags %{sgug_optimised_ldflags}
 
+%global __strip /bin/true
+
 %if 0%{?fedora}
 %ifnarch s390 s390x
 %define _enable_freebob --enable-freebob
@@ -24,6 +26,8 @@ Patch100: jack1.sgifixes00.patch
 Patch101: jack1.sgifixes01.patch
 Patch102: jack1.sgifixes02.patch
 Patch103: jack1.sgifixes03.patch
+
+Patch104: jack1.sgidebugging.patch
 
 URL: http://www.jackaudio.org
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -78,9 +82,6 @@ Requires: %{name} = %{version}
 Small example clients that use the Jack Audio Connection Kit.
 
 %prep
-export SHELL=%{_bindir}/sh
-export SHELL_PATH="$SHELL"
-export CONFIG_SHELL="$SHELL"
 # For 0.121.3
 #%%setup -q -n jack-audio-connection-kit-%{version}
 # For 0.125.0
@@ -90,6 +91,7 @@ export CONFIG_SHELL="$SHELL"
 %patch101 -p1 -b .sgifixes01
 %patch102 -p1 -b .sgifixes02
 %patch103 -p1 -b .sgifixes03
+%patch104 -p1 -b .sgidebugging
 
 # Put custom HTML_FOOTER to avoid timestamp inside
 # (recipe was taken from http://fedoraproject.org/wiki/PackagingDrafts/MultilibTricks)
@@ -104,9 +106,6 @@ touch -r %{doxyfile} %{doxyfile}.new
 mv -f %{doxyfile}.new %{doxyfile}
 
 %build
-export SHELL=%{_bindir}/sh
-export SHELL_PATH="$SHELL"
-export CONFIG_SHELL="$SHELL"
 export CPPFLAGS="-D_SGI_SOURCES -D_SGI_REENTRANT_FUNCTIONS -I%{_includedir}/libdicl-0.1 -DLIBDICL_NEED_GETOPT=1"
 export LDFLAGS="-ldicl-0.1 -lpthread"
 export ac_cv_func_getopt_long=yes

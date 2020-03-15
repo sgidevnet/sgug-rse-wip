@@ -1,7 +1,7 @@
 Summary: Powerful interactive shell
 Name: zsh
 Version: 5.8
-Release: 1%{?dist}
+Release: 2%{?dist}
 License: MIT
 URL: http://zsh.sourceforge.net/
 Source0: https://downloads.sourceforge.net/%{name}/%{name}-%{version}.tar.xz
@@ -87,9 +87,6 @@ perl -pi -e "s|/bin/zsh|%{_prefix}/bin/zsh|g" Functions/Example/zless
 sed -e 's|^\.NOTPARALLEL|#.NOTPARALLEL|' -i 'Config/defs.mk.in'
 
 %build
-export SHELL="%{_bindir}/sh"
-export SHELL_PATH="$SHELL"
-export CONFIG_SHELL="$SHELL"
 
 # make build of run-time loadable modules work again (#1535422)
 %undefine _strict_symbol_defs_build

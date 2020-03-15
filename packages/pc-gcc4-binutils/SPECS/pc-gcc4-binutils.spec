@@ -9,7 +9,7 @@
 Summary: Period correct gcc4 toolchain - binutils
 Name: pc-gcc4-binutils
 Version: 0.0.1
-Release: 1wip%{?dist}
+Release: 2wip%{?dist}
 License: GPLv3+
 URL: https://ftp.gnu.org/pub/gnu/binutils/
 Source: https://ftp.gnu.org/pub/gnu/binutils/binutils-2.17a.tar.bz2
@@ -31,9 +31,6 @@ A work in progress for a period correct gcc4 toolchain - this is the binutils pa
 %setup -q -n binutils-2.17
 
 %build
-export SHELL=%{_bindir}/sh
-export SHELL_PATH="$SHELL"
-export CONFIG_SHELL="$SHELL"
 
 export PATH="%{gcc4bindir}:$PATH"
 export LD_LIBRARYN32_PATH="%{gcc4libdir}:$LD_LIBRARYN32_PATH"
