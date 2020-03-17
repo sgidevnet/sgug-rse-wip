@@ -2,7 +2,7 @@
 
 Name:       distcc
 Version:    3.3.3
-Release:    1%{?dist}
+Release:    2%{?dist}
 Summary:    Distributed C/C++ compilation
 License:    GPLv2+
 URL:        https://github.com/distcc/distcc
@@ -53,16 +53,10 @@ This package contains the compilation server needed to use %{name}.
 
 
 %prep
-export SHELL=%{_bindir}/sh
-export SHELL_PATH="$SHELL"
-export CONFIG_SHELL="$SHELL"
 %setup -q
 %patch0 -p0
 
 %build
-export SHELL=%{_bindir}/sh
-export SHELL_PATH="$SHELL"
-export CONFIG_SHELL="$SHELL"
 #export PYTHON='/usr/bin/python3'
 ./autogen.sh
 #configure --with-gnome --disable-Werror --with-auth
@@ -71,9 +65,6 @@ make %{?_smp_mflags}
 
 
 %install
-export SHELL=%{_bindir}/sh
-export SHELL_PATH="$SHELL"
-export CONFIG_SHELL="$SHELL"
 make install DESTDIR=$RPM_BUILD_ROOT
 
 # Move desktop file to right directory
@@ -100,6 +91,19 @@ mkdir -p $RPM_BUILD_ROOT%{_libdir}/gcc-cross
 #ln -s /usr/lib/distcc $RPM_BUILD_ROOT/usr/lib64/distcc
 
 rm -rf $RPM_BUILD_ROOT%{_docdir}/*
+
+# Setup the masq links in an appropriate directory
+mkdir -p $RPM_BUILD_ROOT%{_prefix}/distccmasqbin
+cd $RPM_BUILD_ROOT%{_prefix}/distccmasqbin
+ln -s ../bin/distcc c++
+ln -s ../bin/distcc cc
+ln -s ../bin/distcc cpp
+ln -s ../bin/distcc g++
+ln -s ../bin/distcc gcc
+
+ln -s ../bin/distcc mips-sgi-irix6.5-c++
+ln -s ../bin/distcc mips-sgi-irix6.5-g++
+ln -s ../bin/distcc mips-sgi-irix6.5-gcc
 
 #%post server
 ##[ $1 -lt 2 ] && /sbin/chkconfig --add distccd ||:
@@ -131,6 +135,7 @@ rm -rf $RPM_BUILD_ROOT%{_docdir}/*
 %{_bindir}/distccmon-text
 %{_bindir}/lsdistcc
 #%{_bindir}/pump
+%{_prefix}/distccmasqbin/*
 %{_mandir}/man1/distcc.*
 %{_mandir}/man1/distccmon*
 %{_mandir}/man1/pump*
