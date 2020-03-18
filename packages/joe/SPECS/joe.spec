@@ -9,7 +9,7 @@ Source: http://downloads.sourceforge.net/joe-editor/joe-%{version}.tar.gz
 %{!?_pkgdocdir: %global _pkgdocdir %{_docdir}/%{name}-%{version}}
 
 Patch0: joe-3.7-joerc.patch
-Patch1: joe-3.8-selinux.patch
+#Patch1: joe-3.8-selinux.patch
 Patch2: joe-3.8-time.patch
 Patch4: joe-3.8-indent-ow.patch
 # Patch5: joe-3.8-aarch64.patch
@@ -26,7 +26,7 @@ environment.
 %prep
 %setup -q
 %patch0 -p1 -b .joerc
-%patch1 -p1 -b .selinux
+#%%patch1 -p1 -b .selinux
 %patch2 -p1 -b .time
 %patch4 -p1 -b .of
 # %patch5 -p1 -b .aarch64
@@ -49,12 +49,13 @@ make install DESTDIR=$RPM_BUILD_ROOT
 install -c -m 644 joe/TODO setup.hint $RPM_BUILD_ROOT%{_pkgdocdir}
 
 # This is automatically compressed afterwards...
-pushd $RPM_BUILD_ROOT/%{_mandir}/man1
+PREVWD=`pwd`
+cd $RPM_BUILD_ROOT/%{_mandir}/man1
 ln -s joe.1 jmacs.1
 ln -s joe.1 jpico.1
 ln -s joe.1 jstar.1
 ln -s joe.1 rjoe.1
-popd
+cd $PREVWD
 
 %files
 %license COPYING
