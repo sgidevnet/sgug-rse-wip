@@ -9,7 +9,7 @@
 Summary: Period correct gcc4 toolchain - gcc
 Name: pc-gcc4-gcc
 Version: 0.0.1
-Release: 1wip%{?dist}
+Release: 2wip%{?dist}
 License: GPLv3+
 URL: https://ftp.gnu.org/pub/gnu/gcc/
 Source: https://ftp.gnu.org/pub/gnu/gcc/gcc-4.7.1/gcc-4.7.1.tar.gz
@@ -37,9 +37,6 @@ A work in progress for a period correct gcc4 toolchain - this is the gcc part
 %build
 mkdir build
 cd build
-export SHELL=%{_bindir}/sh
-export SHELL_PATH="$SHELL"
-export CONFIG_SHELL="$SHELL"
 
 export PATH="%{gcc4bindir}:$PATH"
 export LD_LIBRARYN32_PATH="%{gcc4libdir}:$LD_LIBRARYN32_PATH"
