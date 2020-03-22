@@ -99,10 +99,12 @@ export zsh_cv_sys_nis='no'
 
 export LDFLAGS="-Wl,-rpath -Wl,%{_libdir}/zsh $RPM_LD_FLAGS"
 
+# Not activated for irix
+#    --enable-maildir-support \ #
+
 %configure \
     --enable-etcdir=%{_sysconfdir} \
     --with-tcsetpgrp \
-    --enable-maildir-support \
     --enable-pcre
 
 # prevent the build from failing while running in parallel
