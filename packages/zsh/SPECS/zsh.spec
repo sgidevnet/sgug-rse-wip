@@ -1,7 +1,7 @@
 Summary: Powerful interactive shell
 Name: zsh
 Version: 5.8
-Release: 1%{?dist}
+Release: 2%{?dist}
 License: MIT
 URL: http://zsh.sourceforge.net/
 Source0: https://downloads.sourceforge.net/%{name}/%{name}-%{version}.tar.xz
@@ -20,7 +20,7 @@ BuildRequires: gdbm-devel
 #BuildRequires: glibc-langpack-ja
 #BuildRequires: libcap-devel
 BuildRequires: ncurses-devel
-#BuildRequires: pcre-devel
+BuildRequires: pcre-devel
 BuildRequires: sed
 #BuildRequires: texi2html
 BuildRequires: texinfo
@@ -32,7 +32,7 @@ Requires(postun): coreutils grep
 BuildRequires: hostname
 %else
 # /bin and /usr/bin are separate directories on RHEL-6
-#%define _bindir /bin
+#%%define _bindir /bin
 %endif
 
 Provides: %{_prefix}/bin/zsh
@@ -78,6 +78,7 @@ perl -pi -e "s|/bin/zsh|%{_prefix}/bin/zsh|g" Functions/Misc/run-help
 perl -pi -e "s|/bin/zsh|%{_prefix}/bin/zsh|g" Functions/Misc/zkbd
 perl -pi -e "s|/bin/zsh|%{_prefix}/bin/zsh|g" Functions/Misc/run-help-ip
 perl -pi -e "s|/bin/zsh|%{_prefix}/bin/zsh|g" Functions/Misc/zcalc
+perl -pi -e "s|/bin/zsh|%{_prefix}/bin/zsh|g" Functions/Misc/sticky-note
 perl -pi -e "s|/bin/zsh|%{_prefix}/bin/zsh|g" Functions/Calendar/calendar_add
 perl -pi -e "s|/bin/zsh|%{_prefix}/bin/zsh|g" Functions/Example/cat
 perl -pi -e "s|/bin/zsh|%{_prefix}/bin/zsh|g" Functions/Example/zless
@@ -86,6 +87,7 @@ perl -pi -e "s|/bin/zsh|%{_prefix}/bin/zsh|g" Functions/Example/zless
 sed -e 's|^\.NOTPARALLEL|#.NOTPARALLEL|' -i 'Config/defs.mk.in'
 
 %build
+
 # make build of run-time loadable modules work again (#1535422)
 %undefine _strict_symbol_defs_build
 
@@ -95,11 +97,15 @@ export LIBLDFLAGS='-z lazy'
 # avoid build failure in case we have working ypcat (#1687574)
 export zsh_cv_sys_nis='no'
 
+export LDFLAGS="-Wl,-rpath -Wl,%{_libdir}/zsh $RPM_LD_FLAGS"
+
+# Not activated for irix
+#    --enable-maildir-support \ #
+
 %configure \
     --enable-etcdir=%{_sysconfdir} \
     --with-tcsetpgrp \
-    --enable-maildir-support
-#    --enable-pcre
+    --enable-pcre
 
 # prevent the build from failing while running in parallel
 make -C Src headers
@@ -135,17 +141,17 @@ install -m 644 %{SOURCE6} $RPM_BUILD_ROOT%{_sysconfdir}/skel/.zshrc
 if [ "$1" = 1 ]; then
   if [ ! -f %{_sysconfdir}/shells ] ; then
     echo "%{_bindir}/%{name}" > %{_sysconfdir}/shells
-    echo "/bin/%{name}" >> %{_sysconfdir}/shells
+#    echo "/bin/%{name}" >> %{_sysconfdir}/shells
   else
     grep -q "^%{_bindir}/%{name}$" %{_sysconfdir}/shells || echo "%{_bindir}/%{name}" >> %{_sysconfdir}/shells
-    grep -q "^/bin/%{name}$" %{_sysconfdir}/shells || echo "/bin/%{name}" >> %{_sysconfdir}/shells
+#    grep -q "^/bin/%{name}$" %{_sysconfdir}/shells || echo "/bin/%{name}" >> %{_sysconfdir}/shells
   fi
 fi
 
 %postun
 if [ "$1" = 0 ] && [ -f %{_sysconfdir}/shells ] ; then
   sed -i '\!^%{_bindir}/%{name}$!d' %{_sysconfdir}/shells
-  sed -i '\!^/bin/%{name}$!d' %{_sysconfdir}/shells
+#  sed -i '\!^/bin/%{name}$!d' %{_sysconfdir}/shells
 fi
 
 
