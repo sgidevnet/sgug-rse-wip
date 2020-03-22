@@ -1,3 +1,6 @@
+# This package is able to use optimised linker flags.
+%global build_ldflags %{sgug_optimised_ldflags}
+
 %define byaccdate 20190617
 
 Summary: Berkeley Yacc, a parser generator
