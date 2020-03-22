@@ -6,7 +6,7 @@ Version: 1.9.%{byaccdate}
 Release: 2%{?dist}
 License: Public Domain
 URL: http://invisible-island.net/byacc/byacc.html
-Source: ftp://ftp.invisible-island.net/byacc/byacc-%{byaccdate}.tgz
+Source: ftp://invisible-island.net/byacc/byacc-%{byaccdate}.tgz
 
 BuildRequires:  gcc
 
