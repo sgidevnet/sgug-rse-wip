@@ -28,7 +28,8 @@ A minimal port of python 3.8.1 against sgug-rse.
 %patch3 -p1 -b .3.8.1-irix~
 
 %build
-export LDFLAGS="-lpthread -Wl,-rpath -Wl,%{_libdir}"
+#export LDFLAGS="-lpthread -Wl,-rpath -Wl,%{_libdir}"
+export ac_cv_func_strsignal=no
 %{configure} --enable-shared
 # this can't be set through configure
 X=`mktemp`
