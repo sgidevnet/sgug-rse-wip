@@ -14,8 +14,6 @@ Source4: https://www.x.org/pub/individual/util/lndir-1.0.3.tar.bz2
 Patch2: xorg-cf-files-1.0.2-redhat.patch
 Patch11: imake-1.0.2-abort.patch
 
-Patch100: imake.sgiperlfix.patch
-
 BuildRequires: pkgconfig
 BuildRequires: xorg-x11-util-macros
 BuildRequires: xorg-x11-proto-devel
@@ -41,28 +39,15 @@ migrate software to the GNU autotools system.
 %patch2 -p0 -b .redhat
 
 # imake patches
-export PREV_WD=`pwd`
-cd %{name}-%{version}
+pushd %{name}-%{version}
 %patch11 -p1 -b .abort
-cd $PREV_WD
-
-%patch100 -p1 -b .sgiperlfix
-
-# Rewrite references to /bin/sh to /usr/sgug/bin/sh
-perl -pi -e "s|/bin/sh|%{_bindir}/sh|g" imake-1.0.8/ccmakedep
-perl -pi -e "s|/bin/sh|%{_bindir}/sh|g" imake-1.0.8/cleanlinks
-perl -pi -e "s|/bin/sh|%{_bindir}/sh|g" imake-1.0.8/gccmakedep
-perl -pi -e "s|/bin/sh|%{_bindir}/sh|g" imake-1.0.8/makeg
-perl -pi -e "s|/bin/sh|%{_bindir}/sh|g" imake-1.0.8/mergelib
-perl -pi -e "s|/bin/sh|%{_bindir}/sh|g" imake-1.0.8/mkdirhier
-perl -pi -e "s|/bin/sh|%{_bindir}/sh|g" imake-1.0.8/xmkmf
+popd
 
 %build
 # Build everything
 {
    for pkg in imake makedepend gccmakedep lndir xorg-cf-files ; do
-       export PREV_WD=`pwd`
-      cd $pkg-*
+      pushd $pkg-*
       case $pkg in
          imake|xorg-cf-files)
             %configure --with-config-dir=%{_datadir}/X11/config
@@ -72,7 +57,7 @@ perl -pi -e "s|/bin/sh|%{_bindir}/sh|g" imake-1.0.8/xmkmf
             ;;
       esac
       make
-      cd $PREV_WD
+      popd
    done
 }
 
@@ -80,10 +65,9 @@ perl -pi -e "s|/bin/sh|%{_bindir}/sh|g" imake-1.0.8/xmkmf
 # Install everything
 {
    for pkg in imake makedepend gccmakedep lndir xorg-cf-files ; do
-       export PREV_WD=`pwd`
-      cd $pkg-*
+      pushd $pkg-*
       make install DESTDIR=$RPM_BUILD_ROOT
-      cd $PREV_WD
+      popd
    done
 }
 
@@ -122,6 +106,9 @@ perl -pi -e "s|/bin/sh|%{_bindir}/sh|g" imake-1.0.8/xmkmf
 %changelog
 * Thu Jul 25 2019 Fedora Release Engineering <releng@fedoraproject.org> - 1.0.8-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_31_Mass_Rebuild
+
+* Fri Feb 01 2019 Fedora Release Engineering <releng@fedoraproject.org> - 1.0.7-16
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_30_Mass_Rebuild
 
 * Tue Jul 31 2018 Florian Weimer <fweimer@redhat.com> - 1.0.7-15
 - Rebuild with fixed binutils
