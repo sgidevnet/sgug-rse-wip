@@ -107,7 +107,7 @@ mv -f %{doxyfile}.new %{doxyfile}
 
 %build
 export CPPFLAGS="-D_SGI_SOURCES -D_SGI_REENTRANT_FUNCTIONS -I%{_includedir}/libdicl-0.1 -DLIBDICL_NEED_GETOPT=1"
-export LDFLAGS="-ldicl-0.1 -lpthread"
+export LDFLAGS="-ldicl-0.1 -lpthread -ltinfo"
 export ac_cv_func_getopt_long=yes
 # x86_64 issue reported by Rudolf Kastl (not checked, but not bad).
 # For 0.121.3
