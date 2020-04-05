@@ -71,6 +71,8 @@ which is useful for developing applications that uses fontconfig.
 export HASDOCBOOK=no
 
 autoreconf
+export CPPFLAGS="-I%{_includedir}/libdicl-0.1"
+export LDFLAGS="$RPM_LD_FLAGS -ldicl-0.1"
 %configure	--with-add-fonts=/usr/share/X11/fonts/Type1,/usr/share/X11/fonts/TTF,/usr/local/share/fonts \
 		--disable-static --with-cache-dir=/usr/sgug/lib/fontconfig/cache
 
@@ -100,6 +102,10 @@ install -p -m 0755 %{SOURCE2} $RPM_BUILD_ROOT%{_bindir}/fc-cache
 %find_lang %{name}
 %find_lang %{name}-conf
 cat %{name}-conf.lang >> %{name}.lang
+
+echo "This package currently has unverified and dangerous post install section."
+echo "Refusing to build an RPM of this without resolving that first"
+exit 1
 
 %check
 make check
