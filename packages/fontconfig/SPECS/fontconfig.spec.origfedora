@@ -2,11 +2,6 @@
 # so update the build deps as well to keep deps consistency between runtime and build time.
 %global freetype_version 2.9.1
 
-%global _fontconfig_templatedir %{_prefix}/share/fontconfig/conf.avail
-%global _fontconfig_masterdir %{_prefix}/etc/fonts
-%global _fontconfig_confdir %{_prefix}/etc/fonts/conf.d
-
-
 Summary:	Font configuration and customization library
 Name:		fontconfig
 Version:	2.13.92
@@ -29,15 +24,16 @@ Patch3:		%{name}-fix-1744377.patch
 
 BuildRequires:	expat-devel
 BuildRequires:	freetype-devel >= %{freetype_version}
-# BuildRequires:	fontpackages-devel
-BuildRequires:	uuid-devel
+BuildRequires:	fontpackages-devel
+BuildRequires:	libuuid-devel
 BuildRequires:	autoconf automake libtool gettext
 BuildRequires:	gperf
 
-Requires:       freetype
+Requires:	fontpackages-filesystem freetype
+PreReq:		freetype >= 2.9.1-6
 Requires(post):	grep coreutils
-#Requires:	font(:lang=en)
-#Suggests:	font(dejavusans)
+Requires:	font(:lang=en)
+Suggests:	font(dejavusans)
 
 %description
 Fontconfig is designed to locate fonts within the
@@ -75,10 +71,8 @@ which is useful for developing applications that uses fontconfig.
 export HASDOCBOOK=no
 
 autoreconf
-export CPPFLAGS="-I%{_includedir}/libdicl-0.1"
-export LDFLAGS="$RPM_LD_FLAGS -ldicl-0.1"
-%configure	--with-add-fonts=%{_prefix}/share/X11/fonts/Type1,%{_prefix}/share/X11/fonts/TTF,%{_prefix}/share/fonts \
-		--disable-static --with-cache-dir=%{_prefix}/lib/fontconfig/cache
+%configure	--with-add-fonts=/usr/share/X11/fonts/Type1,/usr/share/X11/fonts/TTF,/usr/local/share/fonts \
+		--disable-static --with-cache-dir=/usr/lib/fontconfig/cache
 
 make %{?_smp_mflags}
 
@@ -95,12 +89,13 @@ ln -s %{_fontconfig_templatedir}/25-unhint-nonlatin.conf $RPM_BUILD_ROOT%{_fontc
 mv $RPM_BUILD_ROOT%{_docdir}/fontconfig/* .
 rmdir $RPM_BUILD_ROOT%{_docdir}/fontconfig/
 
-# We aren't multilib, don't do this unnecessarily
 # rename fc-cache binary
-#mv $RPM_BUILD_ROOT%{_bindir}/fc-cache $RPM_BUILD_ROOT%{_bindir}/fc-cache-%{__isa_bits}
+mv $RPM_BUILD_ROOT%{_bindir}/fc-cache $RPM_BUILD_ROOT%{_bindir}/fc-cache-%{__isa_bits}
+
 # create link to man page
-#echo ".so man1/fc-cache.1" > $RPM_BUILD_ROOT%{_mandir}/man1/fc-cache-%{__isa_bits}.1
-#install -p -m 0755 %{SOURCE2} $RPM_BUILD_ROOT%{_bindir}/fc-cache
+echo ".so man1/fc-cache.1" > $RPM_BUILD_ROOT%{_mandir}/man1/fc-cache-%{__isa_bits}.1
+
+install -p -m 0755 %{SOURCE2} $RPM_BUILD_ROOT%{_bindir}/fc-cache
 
 %find_lang %{name}
 %find_lang %{name}-conf
@@ -109,26 +104,26 @@ cat %{name}-conf.lang >> %{name}.lang
 %check
 make check
 
-#%%post
-#umask 0022
-#
-#mkdir -p /usr/lib/fontconfig/cache
-#
-#[[ -d %{_localstatedir}/cache/fontconfig ]] && rm -rf %{_localstatedir}/cache/fontconfig/* 2> /dev/null || :
-#
-## Force regeneration of all fontconfig cache files
-## The check for existance is needed on dual-arch installs (the second
-##  copy of fontconfig might install the binary instead of the first)
-## The HOME setting is to avoid problems if HOME hasn't been reset
-#if [ -x /usr/bin/fc-cache ] && /usr/bin/fc-cache --version 2>&1 | grep -q %{version} ; then
-#  HOME=/root /usr/bin/fc-cache -f
-#fi
-#
-#%%transfiletriggerin -- /usr/share/fonts /usr/share/X11/fonts/Type1 /usr/share/X11/fonts/TTF /usr/local/share/fonts
-#HOME=/root /usr/bin/fc-cache -s
-#
-#%%transfiletriggerpostun -- /usr/share/fonts /usr/share/X11/fonts/Type1 /usr/share/X11/fonts/TTF /usr/local/share/fonts
-#HOME=/root /usr/bin/fc-cache -s
+%post
+umask 0022
+
+mkdir -p /usr/lib/fontconfig/cache
+
+[[ -d %{_localstatedir}/cache/fontconfig ]] && rm -rf %{_localstatedir}/cache/fontconfig/* 2> /dev/null || :
+
+# Force regeneration of all fontconfig cache files
+# The check for existance is needed on dual-arch installs (the second
+#  copy of fontconfig might install the binary instead of the first)
+# The HOME setting is to avoid problems if HOME hasn't been reset
+if [ -x /usr/bin/fc-cache ] && /usr/bin/fc-cache --version 2>&1 | grep -q %{version} ; then
+  HOME=/root /usr/bin/fc-cache -f
+fi
+
+%transfiletriggerin -- /usr/share/fonts /usr/share/X11/fonts/Type1 /usr/share/X11/fonts/TTF /usr/local/share/fonts
+HOME=/root /usr/bin/fc-cache -s
+
+%transfiletriggerpostun -- /usr/share/fonts /usr/share/X11/fonts/Type1 /usr/share/X11/fonts/TTF /usr/local/share/fonts
+HOME=/root /usr/bin/fc-cache -s
 
 %files -f %{name}.lang
 %doc README AUTHORS
@@ -151,7 +146,7 @@ make check
 # If you want to do so, you should use local.conf instead.
 %config %{_fontconfig_masterdir}/fonts.conf
 %config(noreplace) %{_fontconfig_confdir}/*.conf
-%dir %{_prefix}/lib/fontconfig/cache
+%dir /usr/lib/fontconfig/cache
 %{_mandir}/man1/*
 %{_mandir}/man5/*
 
