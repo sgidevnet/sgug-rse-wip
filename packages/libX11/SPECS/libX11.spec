@@ -18,13 +18,13 @@ Source0: https://xorg.freedesktop.org/archive/individual/lib/%{name}-%{version}.
 %endif
 
 Patch2: dont-forward-keycode-0.patch
+Patch3: libX11.irixfixes.patch
 
 BuildRequires: xorg-x11-util-macros >= 1.11
 BuildRequires: pkgconfig(xproto) >= 7.0.15
 BuildRequires: xorg-x11-xtrans-devel >= 1.0.3-4
-# BuildRequires: libxcb-devel >= 1.2
-BuildRequires: pkgconfig(xau) 
-BuildRequires: pkgconfig(xdmcp)
+BuildRequires: libxcb-devel >= 1.2
+BuildRequires: pkgconfig(xau) pkgconfig(xdmcp)
 BuildRequires: perl(Pod::Usage)
 
 Requires: %{name}-common >= %{version}-%{release}
@@ -47,16 +47,17 @@ Requires: %{name}-xcb = %{version}-%{release}
 %description devel
 X.Org X11 libX11 development package
 
-#% %package xcb
-#%% Summary: XCB interop for libX11
-#%% Conflicts: %{name} < %{version}-%{release}
+%package xcb
+Summary: XCB interop for libX11
+Conflicts: %{name} < %{version}-%{release}
 
-#% %description xcb
-#%% libX11/libxcb interoperability library
+%description xcb
+libX11/libxcb interoperability library
 
 %prep
 %setup -q -n %{tarball}-%{?gitdate:%{gitdate}}%{!?gitdate:%{version}}
 %patch2 -p1 -b .dont-forward-keycode-0
+%patch3 -p1 -b .libx11.irixfixes
 
 %build
 autoreconf -v --install --force
@@ -82,16 +83,16 @@ rm -rf $RPM_BUILD_ROOT%{_docdir}
 %check
 make %{?_smp_mflags} check
 
-#%%ldconfig_post
-#%%ldconfig_postun
+%ldconfig_post
+%ldconfig_postun
 
 %files
 %{_libdir}/libX11.so.6
 %{_libdir}/libX11.so.6.3.0
 
-#%%files xcb
-#%%{_libdir}/libX11-xcb.so.1
-#%%{_libdir}/libX11-xcb.so.1.0.0
+%files xcb
+%{_libdir}/libX11-xcb.so.1
+%{_libdir}/libX11-xcb.so.1.0.0
 
 %files common
 %doc AUTHORS COPYING README.md NEWS
@@ -114,7 +115,7 @@ make %{?_smp_mflags} check
 %{_includedir}/X11/Xutil.h
 %{_includedir}/X11/cursorfont.h
 %{_libdir}/libX11.so
-#%%{_libdir}/libX11-xcb.so
+%{_libdir}/libX11-xcb.so
 %{_libdir}/pkgconfig/x11.pc
 %{_libdir}/pkgconfig/x11-xcb.pc
 %{_mandir}/man3/*.3*

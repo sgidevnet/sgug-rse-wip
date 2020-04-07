@@ -35,7 +35,9 @@ make %{?_smp_mflags}
 
 %install
 rm -rf $RPM_BUILD_ROOT
+mkdir -p %{buildroot}/%{python3_sitelib}
 make install DESTDIR=$RPM_BUILD_ROOT
+cp -Ra xcbgen %{buildroot}%{python3_sitelib}/.
 
 %files
 %doc COPYING NEWS README TODO doc/xml-xcb.txt
@@ -43,7 +45,7 @@ make install DESTDIR=$RPM_BUILD_ROOT
 %dir %{_datadir}/xcb/
 %{_datadir}/xcb/*.xsd
 %{_datadir}/xcb/*.xml
-#%%{python3_sitelib}/xcbgen
+%{python3_sitelib}/xcbgen
 
 %changelog
 * Sat Jul 27 2019 Fedora Release Engineering <releng@fedoraproject.org> - 1.13-7
