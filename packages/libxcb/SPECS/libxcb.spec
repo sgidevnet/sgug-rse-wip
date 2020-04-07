@@ -25,6 +25,8 @@ BuildRequires:  pkgconfig(xcb-proto) >= 1.13
 BuildRequires:  pkgconfig(xorg-macros) >= 1.18
 # BuildRequires:  python3 python3-devel
 
+Patch0: libxcb.irixfixes.patch
+
 %description
 The X protocol C-language Binding (XCB) is a replacement for Xlib featuring a
 small footprint, latency hiding, direct access to the protocol, improved
@@ -55,7 +57,6 @@ autoreconf -v -f --install
 %configure \
     --disable-static \
     --docdir=%{_pkgdocdir} \
-#    --enable-selinux \
 #    --enable-xkb \
 #    --enable-xinput \
 #    --disable-xprint \
@@ -100,7 +101,6 @@ find $RPM_BUILD_ROOT -name '*.la' -delete
 %{_libdir}/libxcb-xinerama.so.0*
 %{_libdir}/libxcb-xinput.so.0*
 %{_libdir}/libxcb-xkb.so.1*
-%{_libdir}/libxcb-xselinux.so.0*
 %{_libdir}/libxcb-xtest.so.0*
 %{_libdir}/libxcb-xv.so.0*
 %{_libdir}/libxcb-xvmc.so.0*

@@ -1,0 +1,69 @@
+diff -Naur libxcb-1.13.1.orig/src/xcb_conn.c libxcb-1.13.1/src/xcb_conn.c
+--- libxcb-1.13.1.orig/src/xcb_conn.c	2018-09-27 05:02:28.000000000 +0000
++++ libxcb-1.13.1/src/xcb_conn.c	2020-04-07 16:43:01.144669318 +0000
+@@ -45,7 +45,7 @@
+ #elif !defined _WIN32
+ #include <sys/select.h>
+ #endif
+-
++#define SCM_RIGHTS      0x01 
+ #ifdef _WIN32
+ #include "xcb_windefs.h"
+ #else
+diff -Naur libxcb-1.13.1.orig/src/xcb_in.c libxcb-1.13.1/src/xcb_in.c
+--- libxcb-1.13.1.orig/src/xcb_in.c	2018-09-27 05:02:28.000000000 +0000
++++ libxcb-1.13.1/src/xcb_in.c	2020-04-07 16:42:50.263975615 +0000
+@@ -43,7 +43,7 @@
+ #include <sys/select.h>
+ #include <sys/socket.h>
+ #endif
+-
++#define SCM_RIGHTS      0x01 
+ #ifdef _WIN32
+ #include "xcb_windefs.h"
+ #endif /* _WIN32 */
+@@ -980,7 +980,7 @@
+ {
+     int n;
+ 
+-#if HAVE_SENDMSG
++/*#if HAVE_SENDMSG
+     struct iovec    iov = {
+         .iov_base = c->in.queue + c->in.queue_len,
+         .iov_len = sizeof(c->in.queue) - c->in.queue_len,
+@@ -1004,7 +1004,7 @@
+      * the sender tried to transmit more than XCB_MAX_PASS_FD
+      * file descriptors.
+      */
+-    if (msg.msg_flags & (MSG_TRUNC|MSG_CTRUNC)) {
++/*    if (msg.msg_flags & (MSG_TRUNC|MSG_CTRUNC)) {
+         _xcb_conn_shutdown(c, XCB_CONN_CLOSED_FDPASSING_FAILED);
+         return 0;
+     }
+@@ -1029,7 +1029,7 @@
+     }
+     while(read_packet(c))
+         /* empty */;
+-#if HAVE_SENDMSG
++/*#if HAVE_SENDMSG
+     if (c->in.in_fd.nfd) {
+         c->in.in_fd.nfd -= c->in.in_fd.ifd;
+         memmove(&c->in.in_fd.fd[0],
+@@ -1041,7 +1041,7 @@
+          * the input buffer, then the server sent some that we weren't
+          * expecting.  Close them and mark the connection as broken;
+          */
+-        if (c->in.queue_len == 0 && c->in.in_fd.nfd != 0) {
++/*        if (c->in.queue_len == 0 && c->in.in_fd.nfd != 0) {
+             int i;
+             for (i = 0; i < c->in.in_fd.nfd; i++)
+                 close(c->in.in_fd.fd[i]);
+@@ -1049,7 +1049,7 @@
+             return 0;
+         }
+     }
+-#endif
++#endif*/
+ #ifndef _WIN32
+     if((n > 0) || (n < 0 && errno == EAGAIN))
+ #else
