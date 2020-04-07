@@ -12,34 +12,32 @@ Source0: http://releases.pagure.org/%{name}/%{name}-%{version}.tar.bz2
 
 BuildRequires: docbook-xsl
 BuildRequires: libxslt
-#BuildRequires: util-linux, flex
-BuildRequires: flex
+BuildRequires: util-linux, flex
 BuildRequires: gcc
 
 # We rely heavily on the DocBook XSL stylesheets!
 Requires: docbook-xsl
 Requires: libxslt
 Requires: docbook-dtds
-#Requires: util-linux, flex
-Requires: flex
+Requires: util-linux, flex
 
 %description
 This is a package for converting XML files to various formats using XSL
 stylesheets.
 
-#%package tex
-#License: GPLv2+
-#Summary: A set of xmlto backends with TeX requirements
-## For full functionality, we need passivetex.
-#Requires: tex-passivetex
-## We require main package
-#Requires: xmlto = %{version}-%{release}
-#BuildArch: noarch
+%package tex
+License: GPLv2+
+Summary: A set of xmlto backends with TeX requirements
+# For full functionality, we need passivetex.
+Requires: tex-passivetex
+# We require main package
+Requires: xmlto = %{version}-%{release}
+BuildArch: noarch
 
 
-#%description tex
-#This subpackage contains xmlto backend scripts which do require
-#PassiveTeX/TeX for functionality.
+%description tex
+This subpackage contains xmlto backend scripts which do require
+PassiveTeX/TeX for functionality.
 
 %package xhtml
 License: GPLv2+
@@ -58,11 +56,7 @@ xhtml1 source format.
 %setup -q
 
 %build
-export CPPFLAGS="-I%{_includedir}/libdicl-0.1"
-export LDFLAGS="$RPM_LD_FLAGS -ldicl-0.1"
-# Rewrite hardcoded path to bash
-perl -pi -e "s|/bin/bash|%{_bindir}/bash|g" xmlif/test/run-test
-%configure BASH=%{_bindir}/bash
+%configure BASH=/bin/bash
 make %{?_smp_mflags}
 
 %check
@@ -84,10 +78,10 @@ make install DESTDIR=$RPM_BUILD_ROOT INSTALL="install -p"
 %exclude %{_datadir}/xmlto/format/xhtml1
 
 
-#%files tex
-#%{_datadir}/xmlto/format/fo/dvi
-#%{_datadir}/xmlto/format/fo/ps
-#%{_datadir}/xmlto/format/fo/pdf
+%files tex
+%{_datadir}/xmlto/format/fo/dvi
+%{_datadir}/xmlto/format/fo/ps
+%{_datadir}/xmlto/format/fo/pdf
 
 %files xhtml
 %dir %{_datadir}/xmlto/format/xhtml1/
