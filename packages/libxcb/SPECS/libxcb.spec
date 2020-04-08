@@ -15,6 +15,8 @@ Source0:    http://xcb.freedesktop.org/dist/%{name}-%{version}.tar.bz2
 # the pkgconfig file so libs that link against libxcb know this...
 Source1:    pthread-stubs.pc.in
 
+Patch100:   libxcb.irixfixes.patch
+
 # BuildRequires:  doxygen
 # BuildRequires:  graphviz
 BuildRequires:  libtool
@@ -24,8 +26,6 @@ BuildRequires:  pkgconfig(xau) >= 0.99.2
 BuildRequires:  pkgconfig(xcb-proto) >= 1.13
 BuildRequires:  pkgconfig(xorg-macros) >= 1.18
 # BuildRequires:  python3 python3-devel
-
-Patch0: libxcb.irixfixes.patch
 
 %description
 The X protocol C-language Binding (XCB) is a replacement for Xlib featuring a
@@ -57,6 +57,7 @@ autoreconf -v -f --install
 %configure \
     --disable-static \
     --docdir=%{_pkgdocdir} \
+#    --enable-selinux \
 #    --enable-xkb \
 #    --enable-xinput \
 #    --disable-xprint \
@@ -101,6 +102,7 @@ find $RPM_BUILD_ROOT -name '*.la' -delete
 %{_libdir}/libxcb-xinerama.so.0*
 %{_libdir}/libxcb-xinput.so.0*
 %{_libdir}/libxcb-xkb.so.1*
+#%{_libdir}/libxcb-xselinux.so.0*
 %{_libdir}/libxcb-xtest.so.0*
 %{_libdir}/libxcb-xv.so.0*
 %{_libdir}/libxcb-xvmc.so.0*
