@@ -15,6 +15,8 @@ Source0:  https://www.x.org/pub/individual/proto/xorgproto-%{version}.tar.bz2
 
 Source40: make-git-snapshot.sh
 
+Patch100: xorgproto.irixfixes.patch
+
 BuildRequires: pkgconfig
 BuildRequires: xorg-x11-util-macros >= 1.0.2-1
 BuildRequires: autoconf automake libtool
@@ -24,7 +26,7 @@ X.Org X11 Protocol headers
 
 
 %prep
-%autosetup -n xorgproto-%{version}
+%autosetup -n xorgproto-%{version} -p1
 
 %build
 autoreconf -f -i -v
