@@ -15,6 +15,15 @@
 # See the comments in https://src.fedoraproject.org/rpms/python-rpm-macros/pull-request/22
 %__python /usr/sgug/bin/python
 
+# Users can use %%python only if they redefined %%__python (e.g. to %%__python3)
+%python() %{lua:\
+    __python = rpm.expand("%__python")\
+    if __python == "/usr/sgug/bin/python" then\
+        rpm.expand("%{error:Cannot use %%python if %%__python wasn't redefined to something other than /usr/sgug/bin/python.}")\
+    else\
+        print(__python)\
+    end\
+}
 
 # python3_pkgversion specifies the version of Python 3 in the distro.  It can be
 # a specific version (e.g. 34 in Fedora EPEL7)
