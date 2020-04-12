@@ -9,7 +9,7 @@ Source0:        http://xorg.freedesktop.org/releases/individual/app/xcalc-%{vers
 Source1:        xcalc.desktop
 
 BuildRequires:  libXaw-devel
-BuildRequires:  desktop-file-utils
+#BuildRequires:  desktop-file-utils
 BuildRequires:  xorg-x11-util-macros
 BuildRequires:  libfontenc-devel
 BuildRequires:  libX11-devel
@@ -41,19 +41,22 @@ make install DESTDIR=$RPM_BUILD_ROOT INSTALL="install -p"
 %if 0%{?el5}
 echo 'Encoding=UTF-8' >> xcalc.desktop
 %endif
-install -d ${RPM_BUILD_ROOT}%{_datadir}/applications
-install -p -m 644 xcalc.desktop ${RPM_BUILD_ROOT}%{_datadir}/applications
-desktop-file-validate ${RPM_BUILD_ROOT}%{_datadir}/applications/xcalc.desktop
+#install -d ${RPM_BUILD_ROOT}%{_datadir}/applications
+#install -p -m 644 xcalc.desktop ${RPM_BUILD_ROOT}%{_datadir}/applications
+#desktop-file-validate ${RPM_BUILD_ROOT}%{_datadir}/applications/xcalc.desktop
 
 %files
 %{_bindir}/xcalc
 %{_datadir}/X11/app-defaults/XCalc
 %{_datadir}/X11/app-defaults/XCalc-color
-%{_datadir}/applications/xcalc.desktop
+#%%{_datadir}/applications/xcalc.desktop
 %{_mandir}/man1/xcalc.1.*
 %doc ChangeLog README
 
 %changelog
+* Sun Apr 12 2020 Daniel Hams <daniel.hams@gmail.com> - 1.0.6-10
+- Import into wip.
+
 * Sat Jul 27 2019 Fedora Release Engineering <releng@fedoraproject.org> - 1.0.6-10
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_31_Mass_Rebuild
 
