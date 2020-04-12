@@ -15,6 +15,7 @@ Provides: %{_bindir}/python3.8-config
 
 BuildRequires: gcc
 BuildRequires: automake, autoconf, libtool, pkgconfig
+BuildRequires: python-rpm-macros
 
 Patch0: python-3.8.1-irix.patch
 Patch1: python-3.8.1-syspath-lib32.patch
