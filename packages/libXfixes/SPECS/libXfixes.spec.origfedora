@@ -51,8 +51,8 @@ make install DESTDIR=$RPM_BUILD_ROOT INSTALL="install -p"
 # We intentionally don't ship *.la files
 rm -f $RPM_BUILD_ROOT%{_libdir}/*.la
 
-#%%ldconfig_post
-#%%ldconfig_postun
+%ldconfig_post
+%ldconfig_postun
 
 %files
 %doc AUTHORS COPYING README
@@ -66,9 +66,6 @@ rm -f $RPM_BUILD_ROOT%{_libdir}/*.la
 %{_mandir}/man3/Xfixes.3*
 
 %changelog
-* Sun Apr 12 2020 Daniel Hams <daniel.hams@gmail.com> - 5.0.3-10
-- And unxy and HAL too, import into wip.
-
 * Thu Jul 25 2019 Fedora Release Engineering <releng@fedoraproject.org> - 5.0.3-10
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_31_Mass_Rebuild
 
