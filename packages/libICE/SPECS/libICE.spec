@@ -68,7 +68,7 @@ done
 %{_libdir}/pkgconfig/ice.pc
 
 %changelog
-* Sun Apr 12 2020 Daniel Hams <daniel.hams@gmail.com> - 1.2.3-4
+* Sun Apr 12 2020 Daniel Hams <daniel.hams@gmail.com> - 1.0.10-2
 - And unxy and HAL too, import into wip.
 
 * Thu Jul 25 2019 Fedora Release Engineering <releng@fedoraproject.org> - 1.0.10-2
