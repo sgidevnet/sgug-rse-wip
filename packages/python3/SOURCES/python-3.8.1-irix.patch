@@ -343,7 +343,7 @@ diff -ur Python-3.8.1/setup.py ../Python-3.8.1/setup.py
  
 -        system_lib_dirs = ['/lib64', '/usr/lib64', '/lib', '/usr/lib']
 -        system_include_dirs = ['/usr/include']
-+        system_lib_dirs = ['/usr/sgug/lib32', '/lib64', '/usr/lib64', '/lib', '/usr/lib']
++        system_lib_dirs = ['/usr/sgug/lib32', '/usr/lib32', '/lib32', '/usr/lib']
 +        system_include_dirs = ['/usr/sgug/include', '/usr/include']
          # lib_dirs and inc_dirs are used to search for files;
          # if a file is found in one of those directories, it can
