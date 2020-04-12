@@ -90,25 +90,26 @@ BuildArch: noarch
 BuildRequires: perl-generators
 Requires: coreutils
 
-Requires: efi-srpm-macros
-Requires: fonts-srpm-macros
-Requires: fpc-srpm-macros
-Requires: ghc-srpm-macros
-Requires: gnat-srpm-macros
-Requires: go-srpm-macros
-Requires: nim-srpm-macros
-Requires: ocaml-srpm-macros
-Requires: openblas-srpm-macros
+#Requires: efi-srpm-macros
+#Requires: fonts-srpm-macros
+#Requires: fpc-srpm-macros
+#Requires: ghc-srpm-macros
+#Requires: gnat-srpm-macros
+#Requires: go-srpm-macros
+#Requires: nim-srpm-macros
+#Requires: ocaml-srpm-macros
+#Requires: openblas-srpm-macros
 Requires: perl-srpm-macros
 # ↓ Provides compileall2 Python module
 Requires: python-srpm-macros >= 3-46
-Requires: rust-srpm-macros
-Requires: qt5-srpm-macros
+#Requires: rust-srpm-macros
+#Requires: qt5-srpm-macros
 
 Requires: rpm >= 4.11.0
-Requires: dwz >= 0.4
+#Requires: dwz >= 0.4
 Requires: zip
-Requires: (annobin if gcc)
+# We don't do binary annotation in sgug-rse (yet, anyway)
+#Requires: (annobin if gcc)
 
 # for brp-mangle-shebangs
 Requires: %{_bindir}/find
