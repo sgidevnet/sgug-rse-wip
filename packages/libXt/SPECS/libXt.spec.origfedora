@@ -56,8 +56,8 @@ rm -f $RPM_BUILD_ROOT%{_libdir}/*.la
 # adding to installed docs in order to avoid using %%doc magic
 cp -p COPYING ${RPM_BUILD_ROOT}%{_datadir}/doc/%{name}/COPYING
 
-#%%ldconfig_post
-#%%ldconfig_postun
+%ldconfig_post
+%ldconfig_postun
 
 %files
 %{_libdir}/libXt.so.6
@@ -107,9 +107,6 @@ cp -p COPYING ${RPM_BUILD_ROOT}%{_datadir}/doc/%{name}/COPYING
 %{_mandir}/man3/*.3*
 
 %changelog
-* Sun Apr 12 2020 Daniel Hams <daniel.hams@gmail.com> - 1.1.5-12.20190424gitba4ec9376
-- And unxy, HAL too, import into wip.
-
 * Thu Jul 25 2019 Fedora Release Engineering <releng@fedoraproject.org> - 1.1.5-12.20190424gitba4ec9376
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_31_Mass_Rebuild
 
