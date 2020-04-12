@@ -45,8 +45,8 @@ rm -f $RPM_BUILD_ROOT%{_libdir}/*.la
 # fixup later
 rm -rf $RPM_BUILD_ROOT%{_docdir}
 
-#%%ldconfig_post
-#%%ldconfig_postun
+%ldconfig_post
+%ldconfig_postun
 
 %files
 %doc COPYING README.md ChangeLog
@@ -86,9 +86,6 @@ rm -rf $RPM_BUILD_ROOT%{_docdir}
 %{_libdir}/pkgconfig/xmuu.pc
 
 %changelog
-* Sun Apr 12 2020 Daniel Hams <daniel.hams@gmail.com> - 1.1.3-2
-- And unxy and HAL too, import into wip.
-
 * Thu Jul 25 2019 Fedora Release Engineering <releng@fedoraproject.org> - 1.1.3-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_31_Mass_Rebuild
 
