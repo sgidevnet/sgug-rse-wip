@@ -10,10 +10,7 @@ URL:            https://xcb.freedesktop.org/
 Source0:        https://xcb.freedesktop.org/dist/%{name}-%{version}.tar.bz2
 BuildArch:      noarch
 
-Patch100:         xcb-proto.sgifixes_removepython01.patch
-Patch101:         xcb-proto.sgifixes_removepython02.patch
-
-#BuildRequires:	python3-devel
+BuildRequires:	python3-devel
 Requires:       pkgconfig
 
 %description
@@ -24,20 +21,15 @@ the protocol.
 
 %prep
 %setup -q
-%patch100 -p1
-%patch101 -p1
 
 %build
-./autogen.sh
 # Bit of a hack to get the pc file in /usr/share, so we can be noarch.
 %configure --libdir=%{_datadir}
 make %{?_smp_mflags}
 
 %install
 rm -rf $RPM_BUILD_ROOT
-mkdir -p %{buildroot}/%{python3_sitelib}
 make install DESTDIR=$RPM_BUILD_ROOT
-cp -Ra xcbgen %{buildroot}%{python3_sitelib}/.
 
 %files
 %doc COPYING NEWS README TODO doc/xml-xcb.txt
@@ -48,6 +40,9 @@ cp -Ra xcbgen %{buildroot}%{python3_sitelib}/.
 %{python3_sitelib}/xcbgen
 
 %changelog
+* Sun Apr 12 2020 Daniel Hams <daniel.hams@gmail.com> - 1.13-7
+- Import into wip
+
 * Sat Jul 27 2019 Fedora Release Engineering <releng@fedoraproject.org> - 1.13-7
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_31_Mass_Rebuild
 
