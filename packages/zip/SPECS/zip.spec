@@ -1,7 +1,10 @@
+# This package is able to use optimised linker flags.
+%global build_ldflags %{sgug_optimised_ldflags}
+
 Summary: A file compression and packaging utility compatible with PKZIP
 Name: zip
 Version: 3.0
-Release: 25%{?dist}
+Release: 26%{?dist}
 License: BSD
 Source: http://downloads.sourceforge.net/infozip/zip30.tar.gz
 URL: http://www.info-zip.org/Zip.html
@@ -16,6 +19,9 @@ Patch3: zip-3.0-time.patch
 Patch4: man.patch
 Patch5: zip-3.0-format-security.patch
 Patch6: zipnote.patch
+
+Patch100: zip.sgifixldflags.patch
+
 BuildRequires: bzip2-devel, gcc
 Requires: unzip
 
@@ -37,7 +43,10 @@ program.
 %patch5 -p1 -b .format-security
 %patch6 -p1 -b .zipnote
 
+%patch100 -p1 -b .sgifixldflags
+
 %build
+export LD_EXT_FLAGS="$RPM_LD_FLAGS"
 make -f unix/Makefile prefix=%{_prefix} "CFLAGS_NOOPT=-I. -DUNIX $RPM_OPT_FLAGS" generic_gcc  %{?_smp_mflags}
 
 %install
@@ -61,6 +70,9 @@ make -f unix/Makefile prefix=$RPM_BUILD_ROOT%{_prefix} \
 %{_mandir}/man1/zipsplit.1*
 
 %changelog
+* Sun Apr 12 2020 Daniel Hams <daniel.hams@gmail.com> - 3.0-26
+- Import into wip
+
 * Sat Jul 27 2019 Fedora Release Engineering <releng@fedoraproject.org> - 3.0-25
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_31_Mass_Rebuild
 
