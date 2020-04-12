@@ -7,14 +7,13 @@ URL: http://www.x.org
 
 Source0: https://www.x.org/pub/individual/lib/%{name}-%{version}.tar.bz2
 
-
 BuildRequires: xorg-x11-util-macros
 BuildRequires: autoconf automake libtool
 BuildRequires: pkgconfig
 BuildRequires: xorg-x11-proto-devel
 BuildRequires: xorg-x11-xtrans-devel >= 1.0.3-4
 BuildRequires: libICE-devel
-BuildRequires: uuid-devel
+BuildRequires: libuuid-devel
 BuildRequires: xmlto
 
 %description
@@ -32,7 +31,7 @@ The X.Org X11 SM (Session Management) development package.
 
 %build
 autoreconf -v --install --force
-export ac_cv_func_uuid_create=no
+
 %configure --with-libuuid --disable-static
 make %{_smp_mflags}
 
@@ -47,8 +46,8 @@ rm -f $RPM_BUILD_ROOT%{_libdir}/*.la
 # we %%doc these ourselves, later, and only the text versions
 rm -rf $RPM_BUILD_ROOT%{_docdir}
 
-#%%ldconfig_post
-#%%ldconfig_postun
+%ldconfig_post
+%ldconfig_postun
 
 %files
 %doc AUTHORS COPYING ChangeLog
@@ -64,9 +63,6 @@ rm -rf $RPM_BUILD_ROOT%{_docdir}
 %{_libdir}/pkgconfig/sm.pc
 
 %changelog
-* Sun Apr 12 2020 Daniel Hams <daniel.hams@gmail.com> - 1.2.3-4
-- And unxy and HAL too, import into wip.
-
 * Thu Jul 25 2019 Fedora Release Engineering <releng@fedoraproject.org> - 1.2.3-4
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_31_Mass_Rebuild
 
