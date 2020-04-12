@@ -15,10 +15,8 @@ Source0:    http://xcb.freedesktop.org/dist/%{name}-%{version}.tar.bz2
 # the pkgconfig file so libs that link against libxcb know this...
 Source1:    pthread-stubs.pc.in
 
-Patch100:   libxcb.irixfixes.patch
-
-# BuildRequires:  doxygen
-# BuildRequires:  graphviz
+BuildRequires:  doxygen
+BuildRequires:  graphviz
 BuildRequires:  libtool
 BuildRequires:  libxslt
 BuildRequires:  pkgconfig
@@ -57,21 +55,15 @@ autoreconf -v -f --install
 %configure \
     --disable-static \
     --docdir=%{_pkgdocdir} \
-    --disable-selinux \
+    --enable-selinux \
     --enable-xkb \
     --enable-xinput \
     --disable-xprint \
     --disable-silent-rules
 
-#    --enable-selinux \
-#    --enable-xkb \
-#    --enable-xinput \
-#    --disable-xprint \
-#    --disable-silent-rules
-
 # Remove rpath from libtool (extra insurance if autoreconf is ever dropped)
-#sed -i 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g' libtool
-#sed -i 's|^runpath_var=LD_RUN_PATH|runpath_var=DIE_RPATH_DIE|g' libtool
+sed -i 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g' libtool
+sed -i 's|^runpath_var=LD_RUN_PATH|runpath_var=DIE_RPATH_DIE|g' libtool
 
 make %{?_smp_mflags}
 
@@ -83,9 +75,9 @@ sed 's,@libdir@,%{_libdir},;s,@prefix@,%{_prefix},;s,@exec_prefix@,%{_exec_prefi
 
 find $RPM_BUILD_ROOT -name '*.la' -delete
 
-#%%ldconfig_post
+%ldconfig_post
 
-#%%ldconfig_postun
+%ldconfig_postun
 
 %files
 %{_libdir}/libxcb-composite.so.0*
@@ -108,7 +100,7 @@ find $RPM_BUILD_ROOT -name '*.la' -delete
 %{_libdir}/libxcb-xinerama.so.0*
 %{_libdir}/libxcb-xinput.so.0*
 %{_libdir}/libxcb-xkb.so.1*
-#%%{_libdir}/libxcb-xselinux.so.0*
+%{_libdir}/libxcb-xselinux.so.0*
 %{_libdir}/libxcb-xtest.so.0*
 %{_libdir}/libxcb-xv.so.0*
 %{_libdir}/libxcb-xvmc.so.0*
@@ -124,9 +116,6 @@ find $RPM_BUILD_ROOT -name '*.la' -delete
 %{_pkgdocdir}
 
 %changelog
-* Sun Apr 12 2020 Daniel Hams <daniel.hams@gmail.com> - 1.13.1-3
-- Import into wip
-
 * Thu Jul 25 2019 Fedora Release Engineering <releng@fedoraproject.org> - 1.13.1-3
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_31_Mass_Rebuild
 
