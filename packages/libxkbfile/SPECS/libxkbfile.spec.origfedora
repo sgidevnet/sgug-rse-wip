@@ -38,8 +38,8 @@ make install DESTDIR=$RPM_BUILD_ROOT
 # We intentionally don't ship *.la files
 rm -f $RPM_BUILD_ROOT%{_libdir}/*.la
 
-#%%ldconfig_post
-#%%ldconfig_postun
+%ldconfig_post
+%ldconfig_postun
 
 %files
 %doc COPYING ChangeLog
@@ -57,9 +57,6 @@ rm -f $RPM_BUILD_ROOT%{_libdir}/*.la
 %{_libdir}/pkgconfig/xkbfile.pc
 
 %changelog
-* Sun Apr 12 2020 Daniel Hams <daniel.hams@gmail.com> - 1.1.0-2
-- Import into wip.
-
 * Thu Jul 25 2019 Fedora Release Engineering <releng@fedoraproject.org> - 1.1.0-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_31_Mass_Rebuild
 
