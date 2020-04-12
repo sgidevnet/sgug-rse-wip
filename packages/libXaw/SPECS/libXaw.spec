@@ -48,8 +48,8 @@ make install DESTDIR=$RPM_BUILD_ROOT INSTALL="install -p"
 install -pm 644 COPYING README ChangeLog $RPM_BUILD_ROOT%{_pkgdocdir}
 rm -f $RPM_BUILD_ROOT%{_libdir}/*.la
 
-%ldconfig_post
-%ldconfig_postun
+#%%ldconfig_post
+#%%ldconfig_postun
 
 %files
 %dir %{_pkgdocdir}
@@ -74,6 +74,9 @@ rm -f $RPM_BUILD_ROOT%{_libdir}/*.la
 #{_pkgdocdir}/%{name}.txt
 
 %changelog
+* Sun Apr 12 2020 Daniel Hams <daniel.hams@gmail.com> - 1.0.13-13
+- And unxy and HAL too, import into wip.
+
 * Thu Jul 25 2019 Fedora Release Engineering <releng@fedoraproject.org> - 1.0.13-13
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_31_Mass_Rebuild
 
