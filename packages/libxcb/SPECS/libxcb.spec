@@ -51,8 +51,11 @@ The %{name}-doc package contains documentation for the %{name} library.
 %autosetup -p1
 
 %build
-sed -i 's/pthread-stubs //' configure.ac
+#sed -i 's/pthread-stubs //' configure.ac
 # autoreconf -f needed to expunge rpaths
+export CPPFLAGS="-D_SGI_SOURCES -D_SGI_REENTRANT_FUNCTIONS"
+export CFLAGS="$RPM_OPT_FLAGS -pthread"
+export LIBS="-lpthread"
 autoreconf -v -f --install
 %configure \
     --disable-static \
@@ -78,8 +81,10 @@ make %{?_smp_mflags}
 %install
 make install DESTDIR=$RPM_BUILD_ROOT
 install -pm 644 COPYING NEWS README $RPM_BUILD_ROOT%{_pkgdocdir}
-sed 's,@libdir@,%{_libdir},;s,@prefix@,%{_prefix},;s,@exec_prefix@,%{_exec_prefix},' %{SOURCE1} \
-    > $RPM_BUILD_ROOT%{_libdir}/pkgconfig/pthread-stubs.pc
+
+# We have an actual pthread-stubs lib on irix
+#sed 's,@libdir@,%{_libdir},;s,@prefix@,%{_prefix},;s,@exec_prefix@,%{_exec_prefix},' %{SOURCE1} \
+#    > $RPM_BUILD_ROOT%{_libdir}/pkgconfig/pthread-stubs.pc
 
 find $RPM_BUILD_ROOT -name '*.la' -delete
 
