@@ -48,15 +48,22 @@ generation.
 
 %prep
 %setup -q -c %{name}-%{version} -a1 -a2 -a3 -a4
-pushd mkfontscale-*
+#pushd mkfontscale-*
+export PREV_WD=`pwd`
+cd mkfontscale-*
 %patch0 -p1 -b .all-encodings
-popd
+#popd
+cd $PREV_WD
 
 %build
+
+export LDFLAGS="$RPM_LD_FLAGS -lgen"
 # Build all apps
 {
 for app in * ; do
-    pushd $app
+#    pushd $app
+    export PREV_WD=`pwd`
+    cd $app
         autoreconf -vif
         case $app in
             font-util-*)
@@ -67,7 +74,8 @@ for app in * ; do
                 ;;
         esac
         make %{?_smp_mflags}
-    popd
+#    popd
+    cd $PREV_WD
 done
 }
 
@@ -75,9 +83,12 @@ done
 # Install all apps
 {
     for app in * ; do
-        pushd $app
+#        pushd $app
+	export PREV_WD=`pwd`
+	cd $app
             %make_install
-        popd
+#        popd
+	cd $PREV_WD
     done
     for i in */README ; do
         [ -s $i ] && cp $i README-$(echo $i | sed 's/-[0-9].*//')
