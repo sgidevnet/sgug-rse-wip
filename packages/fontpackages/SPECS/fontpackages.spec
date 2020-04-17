@@ -142,6 +142,8 @@ EOF
 %{_bindir}/*
 
 %changelog
+* created a patch to resolve the problem with the hardcoded perl-path
+
 * Thu Jul 25 2019 Fedora Release Engineering <releng@fedoraproject.org> - 1.44-25
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_31_Mass_Rebuild
 
