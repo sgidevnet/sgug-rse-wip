@@ -91,9 +91,10 @@ export LIBS="-ldicl-0.1"
         popd
     done
 }
-
+rm -f $RPM_BUILD_ROOT/usr/bin/edid-decode
+rm -f $RPM_BUILD_ROOT/usr/share/man/man1/edid-decode.1
 %files
-%{_bindir}/edid-decode
+#%%{_bindir}/edid-decode
 %{_bindir}/xdpyinfo
 %{_bindir}/xev
 %{_bindir}/xlsatoms
@@ -102,7 +103,7 @@ export LIBS="-ldicl-0.1"
 %{_bindir}/xprop
 %{_bindir}/xvinfo
 %{_bindir}/xwininfo
-%{_mandir}/man1/edid-decode.1*
+#%%{_mandir}/man1/edid-decode.1*
 %{_mandir}/man1/xdpyinfo.1*
 %{_mandir}/man1/xev.1*
 %{_mandir}/man1/xlsatoms.1*
@@ -113,6 +114,8 @@ export LIBS="-ldicl-0.1"
 %{_mandir}/man1/xwininfo.1*
 
 %changelog
+* added a patch and some tuning was done to the spec-file
+
 * Sat Jul 27 2019 Fedora Release Engineering <releng@fedoraproject.org> - 7.5-33
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_31_Mass_Rebuild
 
