@@ -30,12 +30,12 @@ fast as possible.
 %autosetup -n ninja-%{version} -p1
 
 %build
-#%CFLAGS="%{optflags}" 
-#%LDFLAGS="%{?__global_ldflags}"
+CFLAGS="%{optflags}" 
+LDFLAGS="%{?__global_ldflags}"
 #%export CPPFLAGS="-I%{_includedir}/libdicl-0.1 -DLIBDICL_NEED_GETOPT=1"
 #%export LIBS="-ldicl-0.1"
-export CFLAGS="-I%{_includedir}/libdicl-0.1 -DLIBDICL_NEED_GETOPT=1 $RPM_OPT_FLAGS"
-export LDFLAGS="-ldicl-0.1 $RPM_LD_FLAGS"
+#%export CFLAGS="-I%{_includedir}/libdicl-0.1 -DLIBDICL_NEED_GETOPT=1 $RPM_OPT_FLAGS"
+#%export LDFLAGS="-ldicl-0.1 $RPM_LD_FLAGS"
 %if 0%{?rhel} && 0%{?rhel} <= 7
 %{__python2} \
 %else
