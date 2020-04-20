@@ -1,0 +1,50 @@
+diff -Naur ninja-orig/src/disk_interface.cc ninja-1.9.0/src/disk_interface.cc
+--- ninja-orig/src/disk_interface.cc	2019-01-30 10:58:59.000000000 +0000
++++ ninja-1.9.0/src/disk_interface.cc	2020-04-19 20:52:33.042983328 +0000
+@@ -206,7 +206,7 @@
+   return ((int64_t)st.st_mtimespec.tv_sec * 1000000000LL +
+           st.st_mtimespec.tv_nsec);
+ #elif (_POSIX_C_SOURCE >= 200809L || _XOPEN_SOURCE >= 700 || defined(_BSD_SOURCE) || defined(_SVID_SOURCE) || \
+-       defined(__BIONIC__) || (defined (__SVR4) && defined (__sun)) || defined(__FreeBSD__))
++       defined(__BIONIC__) || (defined (__SVR4) && defined (__sun)) || defined(__FreeBSD__) || defined(__sgi))
+   // For glibc, see "Timestamp files" in the Notes of http://www.kernel.org/doc/man-pages/online/pages/man2/stat.2.html
+   // newlib, uClibc and musl follow the kernel (or Cygwin) headers and define the right macro values above.
+   // For bsd, see https://github.com/freebsd/freebsd/blob/master/sys/sys/stat.h and similar
+@@ -216,7 +216,7 @@
+ #elif defined(_AIX)
+   return (int64_t)st.st_mtime * 1000000000LL + st.st_mtime_n;
+ #else
+-  return (int64_t)st.st_mtime * 1000000000LL + st.st_mtimensec;
++  return (int64_t)st.st_mtim.tv_sec * 1000000000LL + st.st_mtim.tv_nsec;
+ #endif
+ #endif
+ }
+diff -Naur ninja-orig/src/util.cc ninja-1.9.0/src/util.cc
+--- ninja-orig/src/util.cc	2019-01-30 10:58:59.000000000 +0000
++++ ninja-1.9.0/src/util.cc	2020-04-19 20:55:29.893309747 +0000
+@@ -478,7 +478,7 @@
+   }
+   return stripped;
+ }
+-
++/*
+ int GetProcessorCount() {
+ #ifdef _WIN32
+   SYSTEM_INFO info;
+@@ -488,7 +488,7 @@
+   return sysconf(_SC_NPROCESSORS_ONLN);
+ #endif
+ }
+-
++*/
+ #if defined(_WIN32) || defined(__CYGWIN__)
+ static double CalculateProcessorLoad(uint64_t idle_ticks, uint64_t total_ticks)
+ {
+@@ -573,6 +573,7 @@
+   return 1.0 / (1 << SI_LOAD_SHIFT) * si.loads[0];
+ }
+ #else
++int getloadavg(double *, int);
+ double GetLoadAverage() {
+   double loadavg[3] = { 0.0f, 0.0f, 0.0f };
+   if (getloadavg(loadavg, 3) < 0) {
