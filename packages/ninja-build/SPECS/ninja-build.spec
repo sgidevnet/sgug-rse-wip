@@ -7,7 +7,9 @@ URL:            https://ninja-build.org/
 Source0:        https://github.com/ninja-build/ninja/archive/v%{version}/ninja-%{version}.tar.gz
 Source1:        ninja.vim
 Source2:        macros.ninja
-Patch0:         ninjapatch.irixfixes.patch 
+
+Patch100:       ninja-build.sgifixes.patch
+
 BuildRequires:  gcc-c++
 %if 0%{?rhel} && 0%{?rhel} <= 7
 #BuildRequires:  python2-devel
@@ -30,12 +32,9 @@ fast as possible.
 %autosetup -n ninja-%{version} -p1
 
 %build
-CFLAGS="%{optflags}" 
-LDFLAGS="%{?__global_ldflags}"
-#%export CPPFLAGS="-I%{_includedir}/libdicl-0.1 -DLIBDICL_NEED_GETOPT=1"
-#%export LIBS="-ldicl-0.1"
-#%export CFLAGS="-I%{_includedir}/libdicl-0.1 -DLIBDICL_NEED_GETOPT=1 $RPM_OPT_FLAGS"
-#%export LDFLAGS="-ldicl-0.1 $RPM_LD_FLAGS"
+export CFLAGS="-I%{_includedir}/libdicl-0.1 -DLIBDICL_NEED_GETOPT=1 $RPM_OPT_FLAGS"
+export LDFLAGS="-ldicl-0.1 $RPM_LD_FLAGS"
+
 %if 0%{?rhel} && 0%{?rhel} <= 7
 %{__python2} \
 %else
@@ -43,7 +42,8 @@ LDFLAGS="%{?__global_ldflags}"
 %endif
   configure.py --bootstrap --verbose
 ./ninja -v all
-./ninja -v manual
+# no asciidoc yet
+#./ninja -v manual
 
 %install
 # TODO: Install ninja_syntax.py?
@@ -65,7 +65,8 @@ ln -s ninja %{buildroot}%{_bindir}/ninja-build
 
 %files
 %license COPYING
-%doc HACKING.md README doc/manual.html
+#%%doc HACKING.md README doc/manual.html
+%doc HACKING.md README
 %{_bindir}/ninja
 %{_bindir}/ninja-build
 %{_datadir}/bash-completion/completions/ninja
@@ -77,6 +78,9 @@ ln -s ninja %{buildroot}%{_bindir}/ninja-build
 %{rpmmacrodir}/macros.ninja
 
 %changelog
+* Mon Apr 20 2020 SGUG <sgug@sgidev.sh> - 1.9.0-3
+- Import into wip
+
 * Thu Jul 25 2019 Fedora Release Engineering <releng@fedoraproject.org> - 1.9.0-3
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_31_Mass_Rebuild
 
