@@ -1,4 +1,4 @@
-%global _catalogue %{_prefix}/etc/X11/fontpath.d
+%global _catalogue /etc/X11/fontpath.d
 # NOTE: Fonts strictly intended for X core fonts, should be installed into _x11fontdir.
 %global _x11fontdir %{_datadir}/X11/fonts
 
@@ -219,8 +219,7 @@ Contains a set of Cyrillic fonts.
 # Build all apps
 {
     for app in * ; do
-	export PREV_WD=`pwd`
-        cd $app
+        pushd $app
             autoreconf -vif
             case $app in
                 font-adobe-100dpi-*|font-adobe-75dpi-*|font-adobe-utopia-100dpi-*|font-adobe-utopia-75dpi-*|font-bh-*)
@@ -244,7 +243,7 @@ Contains a set of Cyrillic fonts.
                     ;;
             esac
             make %{?_smp_mflags}
-        cd $PREV_WD
+        popd
     done
 }
 
@@ -253,10 +252,9 @@ Contains a set of Cyrillic fonts.
 # Install all apps
 {
     for app in * ; do
-	export PREV_WD=`pwd`
-        cd $app
+        pushd $app
             %make_install
-        cd $PREV_WD
+        popd
     done
 }
 
@@ -932,9 +930,6 @@ mkfontdir %{_x11fontdir}/cyrillic
 %ghost %verify(not md5 size mtime) %{_x11fontdir}/cyrillic/fonts.cache-*
 
 %changelog
-* Tue Apr 14 2020 Daniel Hams <daniel.hams@gmail.com> - 7.5-23
-- Pull into wip
-
 * Sat Jul 27 2019 Fedora Release Engineering <releng@fedoraproject.org> - 7.5-23
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_31_Mass_Rebuild
 

@@ -77,7 +77,7 @@ export HASDOCBOOK=no
 autoreconf
 export CPPFLAGS="-I%{_includedir}/libdicl-0.1"
 export LDFLAGS="$RPM_LD_FLAGS -ldicl-0.1"
-%configure	--with-add-fonts=%{_prefix}/share/X11/fonts/Type1,%{_prefix}/share/X11/fonts/TTF,%{_prefix}/share/fonts \
+%configure	--with-add-fonts=%{_prefix}/share/X11/fonts/Type1,%{_prefix}/share/X11/fonts/TTF,%{_prefix}/share/fonts,/usr/lib/X11/fonts/100dpi,/usr/lib/X11/fonts/75dpi,/usr/lib/X11/fonts/misc,/usr/lib/X11/fonts/Type1,/usr/lib/X11/fonts/Speedo,/usr/lib/X11/fonts/CID \
 		--disable-static --with-cache-dir=%{_prefix}/lib/fontconfig/cache
 
 make %{?_smp_mflags}

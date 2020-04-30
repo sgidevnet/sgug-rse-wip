@@ -57,7 +57,8 @@ cd $PREV_WD
 
 %build
 
-export LDFLAGS="$RPM_LD_FLAGS -lgen"
+export CPPFLAGS="-I%{_includedir}/libdicl-0.1"
+export LDFLAGS="-ldicl-0.1 $RPM_LD_FLAGS -lgen"
 # Build all apps
 {
 for app in * ; do
