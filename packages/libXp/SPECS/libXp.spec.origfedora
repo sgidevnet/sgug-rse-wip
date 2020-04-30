@@ -65,8 +65,8 @@ rm -rf $RPM_BUILD_ROOT%{_mandir}
 # We intentionally don't ship *.la files
 rm -f $RPM_BUILD_ROOT%{_libdir}/*.la
 
-#%%ldconfig_post
-#%%ldconfig_postun
+%ldconfig_post
+%ldconfig_postun
 
 %files
 %doc AUTHORS COPYING ChangeLog
@@ -81,9 +81,6 @@ rm -f $RPM_BUILD_ROOT%{_libdir}/*.la
 %{_libdir}/pkgconfig/xp.pc
 
 %changelog
-* Sun Apr 19 2020 Daniel Hams <daniel.hams@gmail.com> - 1.0.3-5
-- Import into wip
-
 * Thu Jul 25 2019 Fedora Release Engineering <releng@fedoraproject.org> - 1.0.3-5
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_31_Mass_Rebuild
 
