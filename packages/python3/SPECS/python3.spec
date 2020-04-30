@@ -6,12 +6,21 @@ License: GPLv3+
 URL: https://www.python.org
 Source: https://www.python.org/ftp/python/%{version}/Python-%{version}.tgz
 
-Provides: python3, python3-devel
 Provides: %{_bindir}/python
 Provides: %{_bindir}/python3
 Provides: %{_bindir}/python3.8
 Provides: %{_bindir}/python3-config
 Provides: %{_bindir}/python3.8-config
+
+Provides: python(abi) = 3.8
+Provides: python3(abi) = 3.8
+Provides: python3
+Provides: python3-devel
+Provides: python3-devel(abi) = 3.8
+Provides: 2to3
+Provides: pkgconfig(python) = 3.8
+Provides: pkgconfig(python3) = 3.8
+Provides: pkgconfig(python-3.8) = 3.8
 
 BuildRequires: gcc
 BuildRequires: automake, autoconf, libtool, pkgconfig
@@ -41,10 +50,13 @@ perl -pi -e "s|/bin/bash|%{_bindir}/bash|g" Lib/test/test_*.py
 perl -pi -e "s|/bin/bash|%{_bindir}/bash|g" Lib/test/cfgparser.2
 perl -pi -e "s|/bin/bash|%{_bindir}/bash|g" Lib/test/ziptestdata/header.sh
 
+# Remove bundled libraries to ensure that we're using the system copy
+rm -rf Modules/expat
+
 %build
 #export LDFLAGS="-lpthread -Wl,-rpath -Wl,%{_libdir}"
 export ac_cv_func_strsignal=no
-%{configure} --enable-shared
+%{configure} --enable-shared --with-system-expat --with-system-ffi --with-ssl-default-suites=openssl --without-ensurepip --with-computed-gotos=yes
 # this can't be set through configure
 X=`mktemp`
 sed 's,^SCRIPTDIR.*$,SCRIPTDIR=     $(prefix)/lib32,g' < Makefile > $X
@@ -72,6 +84,13 @@ cd $PREV_WD
 rm $RPM_BUILD_ROOT%{_libdir}/python3.8/test/ziptestdata/exe_with_z64
 rm $RPM_BUILD_ROOT%{_libdir}/python3.8/test/ziptestdata/exe_with_zip
 
+# Remove setup tools which comes from it's own package
+rm -rf $RPM_BUILD_ROOT%{_libdir}/python3.8/site-packages/setuptools
+
+# Remove pip which comes from it's own package
+rm -rf $RPM_BUILD_ROOT%{_libdir}/python3.8/site-packages/pip
+rm -rf $RPM_BUILD_ROOT%{_bindir}/pip*
+
 %files
 %{_bindir}/*
 %{_libdir}/libpython3*
@@ -79,7 +98,7 @@ rm $RPM_BUILD_ROOT%{_libdir}/python3.8/test/ziptestdata/exe_with_zip
 %{_libdir}/python3.8/*
 
 %{_prefix}/include/python3.8/*
-%{_prefix}/man/*
+%{_mandir}/*
 
 %changelog
 * Sun Apr 12 2020 Daniel Hams <daniel.hams@gmail.com> - 3.8.1-2
